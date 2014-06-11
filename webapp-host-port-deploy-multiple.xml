@@ -1,0 +1,157 @@
+<project name="HostDeploy" basedir=".">
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <property environment="env"/>
+    
+    <!-- sets the files to copy from a souce directory -->
+    <var name="copy.files.include" value="NOT-SET"/>    
+    
+    <!--load server name by using the currentbuildenv from Jenkins as an index into the servers file, 
+        qa1 becomes qa, prod1 becomes prod. The configuration files are named in this 
+        fashon dbdirect-1.0-[dev|dit|qa|prod].properties -->
+    <var name="hostname" value="NOT-SET"/>
+    <var name="props.designation" value="NOT-SET"/>
+    <var name="serverport" value="NOT-SET"/>
+           
+    <if>
+        <equals arg1="${env.currentbuildenv}" arg2="isl-dev" trim="true"/>
+        <then>
+            <var name="props.designation" value="dev"/>        
+            <var name="hostname" value="${server.tomcat.isl-dev.server}"/>            	            	
+        </then>                
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="isl-dit" trim="true"/>
+            <then>
+                <var name="props.designation" value="dit"/>        
+                <var name="hostname" value="${server.tomcat.isl-dit.server}"/>            	            	
+            </then>
+        </elseif>        
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="uat" trim="true"/>
+            <then>
+                <var name="props.designation" value="uat"/>        
+                <var name="hostname" value="${server.tomcat.uat.server}"/>            	            	
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="isl-qa1" trim="true"/>
+            <then>
+                <var name="props.designation" value="qa"/>
+                <var name="hostname" value="${server.tomcat.isl-qa1.server}"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="isl-qa2" trim="true"/>
+            <then>
+                <var name="props.designation" value="qa"/>
+                <var name="hostname" value="${server.tomcat.isl-qa2.server}"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="maint1" trim="true"/>
+            <then>
+                <var name="props.designation" value="maint"/>
+                <var name="hostname" value="${server.tomcat.maint1.server}"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="maint2" trim="true"/>
+            <then>
+                <var name="props.designation" value="maint"/>
+                <var name="hostname" value="${server.tomcat.maint2.server}"/>
+            </then>
+        </elseif>                
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="prod1" trim="true"/>
+            <then>
+                <var name="props.designation" value="prod"/>
+                <var name="hostname" value="${server.tomcat.prod1.server}"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="prod2" trim="true"/>
+            <then>
+                <var name="props.designation" value="prod"/>
+                <var name="hostname" value="${server.tomcat.prod2.server}"/>
+            </then>
+        </elseif>    
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="dr1" trim="true"/>
+            <then>
+                <var name="props.designation" value="prod"/>
+                <var name="hostname" value="${server.tomcat.dr1.server}"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="dr2" trim="true"/>
+            <then>
+                <var name="props.designation" value="prod"/>
+                <var name="hostname" value="${server.tomcat.dr2.server}"/>
+            </then>
+        </elseif>  
+
+        <!-- Austin servers from here down -->
+
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="dev" trim="true"/>
+            <then>
+                <var name="props.designation" value="dev"/>
+                <var name="hostname" value="${server.tomcat.dev.server}"/>
+            </then>
+        </elseif>  
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="dit" trim="true"/>
+            <then>
+                <var name="props.designation" value="dit"/>
+                <var name="hostname" value="${server.tomcat.dit.server}"/>
+            </then>
+        </elseif>        
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="qa1" trim="true"/>
+            <then>
+                <var name="props.designation" value="qa"/>
+                <var name="hostname" value="${server.tomcat.qa1.server}"/>
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.currentbuildenv}" arg2="qa2" trim="true"/>
+            <then>
+                <var name="props.designation" value="qa"/>
+                <var name="hostname" value="${server.tomcat.qa2.server}"/>
+            </then>
+        </elseif>
+                      
+        <else>
+            <fail>ERROR - Destination server: ${env.currentbuildenv} is unknown</fail>
+        </else>
+    </if>
+	
+		
+	 <if>
+        <equals arg1="${env.buildinstance}" arg2="tomcat-01" trim="true"/>
+        <then>              
+            <var name="serverport" value="${server.tomcat01.port}"/>            	            	
+        </then>                
+        <elseif>
+            <equals arg1="${env.buildinstance}" arg2="tomcat-02" trim="true"/>
+            <then>
+                <var name="serverport" value="${server.tomcat02.port}"/>           	            	
+            </then>
+        </elseif>        
+        <elseif>
+            <equals arg1="${env.buildinstance}" arg2="tomcat-03" trim="true"/>
+            <then>
+               <var name="serverport" value="${server.tomcat03.port}"/>           	            	
+            </then>
+        </elseif>
+        <elseif>
+            <equals arg1="${env.buildinstance}" arg2="tomcat-04" trim="true"/>
+            <then>
+                <var name="serverport" value="${server.tomcat04.port}"/>
+            </then>
+        </elseif>                            
+        <else>
+            <fail>ERROR - Buildinstance: ${env.buildinstance} is unknown</fail>
+        </else>
+    </if>
+</project>
+    
